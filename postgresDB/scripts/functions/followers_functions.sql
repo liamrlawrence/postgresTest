@@ -1,11 +1,11 @@
 -- Get the users.user_id of the followers of _user_id
 CREATE OR REPLACE FUNCTION FN_Get_Followers(
     _user_id BIGINT
-) RETURNS TABLE(followers_user_id BIGINT)
+) RETURNS TABLE(follower_user_id BIGINT)
 LANGUAGE SQL
 AS $$
-    SELECT follower_id FROM followers
-    WHERE user_id = _user_id;
+    SELECT follower_user_id FROM followers
+    WHERE followed_user_id = _user_id;
 $$;
 
 
@@ -15,24 +15,25 @@ CREATE OR REPLACE FUNCTION FN_Get_Following(
 ) RETURNS TABLE(following_user_id BIGINT)
 LANGUAGE SQL
 AS $$
-    SELECT user_id FROM followers
-    WHERE follower_id = _user_id;
+    SELECT followed_user_id FROM followers
+    WHERE follower_user_id = _user_id;
 $$;
 
 
--- Returns TRUE if _user_id is following _follow_id
+-- Returns TRUE if the follower is following followed
 CREATE OR REPLACE FUNCTION FN_Is_Following(
-    _user_id BIGINT,
-    _follow_id BIGINT
+    _follower_user_id   BIGINT,
+    _followed_user_id   BIGINT
 ) RETURNS BOOLEAN
 LANGUAGE PLPGSQL
 AS $$
     BEGIN
         RETURN EXISTS(
-            SELECT user_id FROM followers
+            SELECT followed_user_id FROM followers
             WHERE
-                user_id = _follow_id
-                AND follower_id = _user_id
+                followed_user_id = _followed_user_id
+                AND follower_user_id = _follower_user_id
+                AND following = TRUE
         );
     END;
 $$;

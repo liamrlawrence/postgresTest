@@ -1,10 +1,11 @@
-
+-- Posts table
 CREATE TABLE posts(
     post_id         BIGINT      PRIMARY KEY,
     post_code       TEXT        NOT NULL UNIQUE,
-    user_id         BIGINT      NOT NULL REFERENCES users(user_id) ,
+    poster_user_id  BIGINT      NOT NULL REFERENCES users(user_id) ,
     content         JSONB       NOT NULL,
     deleted         BOOLEAN     NOT NULL DEFAULT FALSE,
-    create_date     TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_date   TIMESTAMP   NOT NULL DEFAULT TIMESTAMP 'epoch'
+    created_date    TIMESTAMPTZ NOT NULL DEFAULT CLOCK_TIMESTAMP(),
+    modified_date   TIMESTAMPTZ NOT NULL DEFAULT TIMESTAMPTZ 'epoch',
+    modified_by     TEXT        NOT NULL
 );

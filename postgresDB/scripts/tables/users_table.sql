@@ -1,7 +1,8 @@
 CREATE TYPE user_roles_e AS ENUM(
+    'banned',
     'guest',
     'user',
-    'banned',
+    'elevated_user',
     'admin',
     'debug',
     'bot'
@@ -26,8 +27,8 @@ CREATE TABLE users(
     profile         JSONB           NOT NULL,
     settings        JSONB           NOT NULL,
     is_active       BOOLEAN         NOT NULL DEFAULT TRUE,
-    create_date     TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_date   TIMESTAMP       NOT NULL DEFAULT TIMESTAMP 'epoch',
+    created_date    TIMESTAMPTZ     NOT NULL DEFAULT CLOCK_TIMESTAMP(),
+    modified_date   TIMESTAMPTZ     NOT NULL DEFAULT TIMESTAMPTZ 'epoch',
     modified_by     TEXT            NOT NULL,
     CHECK (3 <= LENGTH(username) AND LENGTH(username) <= 30),
     CHECK (3 <= LENGTH(email) AND LENGTH(email) <= 256),

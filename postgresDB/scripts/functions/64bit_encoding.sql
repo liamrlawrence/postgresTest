@@ -71,6 +71,7 @@ $$;
 
 
 -- Encodes a 64 bit number in Crockford-32, returning a string
+-- TODO BUG: Sometimes bytes at the end are dropped (input: 381508387442752512) - 18Nov2022
 CREATE OR REPLACE FUNCTION enc_64bit_crock32(x BIGINT) RETURNS TEXT
 LANGUAGE PLPGSQL
 AS $$
